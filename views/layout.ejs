@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('partials/head') %>
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+  <%- include('partials/navbar') %>
+  <%- include('partials/sidebar') %>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <section class="content-header"></section>
+    <%- body %>
+  </div>
+  <!-- /.content-wrapper -->
+
+  <%- include('partials/footer') %>
+</div>
+<!-- ./wrapper -->
+
+<%- include('partials/scripts') %>
+</body>
+</html>

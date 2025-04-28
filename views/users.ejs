@@ -1,0 +1,86 @@
+  
+  <!-- Main content -->
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">User List</h3>
+              <div class="card-tools">
+                <!-- <a href="/users/create" class="btn btn-primary btn-sm">
+                  <i class="fas fa-plus"></i> Add User
+                </a> -->
+              </div>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+              <table id="usersTable" class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Gender</th>
+                    <th>Age</th>
+                    <th>Orientation</th>
+                    <th>Profile Completed</th>
+                    <th>Is Blocked</th>
+                    <!-- <th>Actions</th> -->
+                  </tr>
+                </thead>
+                <tbody>
+                  <% if (users.length === 0) { %>
+                    <tr>
+                      <td colspan="8" class="text-center">No users found.</td>
+                    </tr>
+                  <% } else { %>
+                    <% users.forEach(user => { %>
+                      <tr>
+                        <td><%= user.id %></td>
+                        <td>
+                          <% if (user.profile_image && user.profile_image.length > 0) { %>
+                            <img src="<%= user.profile_image[0].url %>" alt="Profile Image" style="width:30px; height:30px; border-radius:50%; margin-right:5px;">
+                          <% } %>
+                          <%= user.name %>
+                        </td>
+                        <td><%= user.email %></td>
+                        <td><%= user.gender || 'N/A' %></td>  
+                        <td><%= user.age || '' %></td>
+                        <td><%= user.orientation || 'N/A' %></td>
+                        <td>
+                          <% if (user.is_profile_completed) { %>
+                            <span class="badge badge-success">Yes</span>
+                          <% } else { %>
+                            <span class="badge badge-danger">No</span>
+                          <% } %>
+                        </td>
+                        <td>
+                          <% if (user.is_blocked) { %>
+                            <span class="badge badge-danger">Blocked</span>
+                          <% } else { %>
+                            <span class="badge badge-success">Active</span>
+                          <% } %>
+                        </td>
+                        <!-- <td>
+                          <a href="/users/<%= user.id %>/edit" class="btn btn-sm btn-info">
+                            <i class="fas fa-edit"></i>
+                          </a>
+                        </td> -->
+                      </tr>
+                    <% }); %>
+                  <% } %>
+                </tbody>
+              </table>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+  </section>
+  

@@ -1,0 +1,107 @@
+  
+  <!-- Main content -->
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Question List</h3>
+              <div class="card-tools">
+                <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addQuestionModal">
+                    <i class="fas fa-plus"></i> Add Question
+                  </button>
+                               
+              </div>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+              <table id="usersTable" class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Question</th>
+                    <th>Alt Question</th>
+                    <th>Options</th>
+                    <th>Correct Answer</th>
+                    <th>Created At</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% if (questions.length === 0) { %>
+                    <tr>
+                      <td colspan="6" class="text-center">No questions found.</td>
+                    </tr>
+                  <% } else { %>
+                    <% questions.forEach((q, index) => { %>
+                      <tr>
+                        <td><%= index + 1 %></td>
+                        <td><%= q.question_text %></td>
+                        <td><%= q.alternate_question_text %></td>
+                        <td>
+                          <ul>
+                            <% q.options.forEach(opt => { %>
+                              <li><%= opt %></li>
+                            <% }) %>
+                          </ul>
+                        </td>
+                        <td><%= q.correct_answer %></td>
+                        <td><%= new Date(q.created_at).toLocaleString() %></td>
+                      </tr>
+                    <% }) %>
+                  <% } %>
+                </tbody>
+              </table>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </div>
+    
+    <!-- /.container-fluid -->
+  </section>
+  <!-- Add Question Modal -->
+<div class="modal fade" id="addQuestionModal" tabindex="-1" aria-labelledby="addQuestionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <form action="/questions/add" method="POST">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Add New Question</h5>
+            <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">x</button>
+          </div>
+          
+          <div class="modal-body">
+            <div class="mb-3">
+              <label>Question Text</label>
+              <input type="text" name="question_text" class="form-control" required>
+            </div>
+  
+            <div class="mb-3">
+              <label>Alternate Question Text</label>
+              <input type="text" name="alternate_question_text" class="form-control">
+            </div>
+  
+            <div class="mb-3">
+              <label>Options (comma separated)</label>
+              <input type="text" name="options" class="form-control" required placeholder="e.g. Coffee,Tea,Water">
+            </div>
+  
+            <div class="mb-3">
+              <label>Correct Answer</label>
+              <input type="text" name="correct_answer" class="form-control" required>
+            </div>
+          </div>
+          
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-success">Add Question</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  

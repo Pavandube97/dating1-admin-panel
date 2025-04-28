@@ -1,0 +1,59 @@
+  
+  <!-- Main content -->
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Reported-User List</h3>
+              <div class="card-tools">
+                <!-- <a href="/users/create" class="btn btn-primary btn-sm">
+                  <i class="fas fa-plus"></i> Add User
+                </a> -->
+              </div>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+              <table id="usersTable" class="table table-bordered table-striped">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Reporter Name</th>
+                    <th>Reported Name</th>
+                    <th>Reason</th>
+                    <th>Description</th>
+                    <th>Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% if (reportedUsers.length === 0) { %>
+                    <tr>
+                      <td colspan="6" class="text-center">No reports found.</td>
+                    </tr>
+                  <% } else { %>
+                    <% reportedUsers.forEach((report, index) => { %>
+                      <tr>
+                        <td><%= index + 1 %></td>
+                        <td><%= report.reporter.name %></td>
+                        <td><%= report.reported.name %></td>
+                        <td><%= report.reason %></td>
+                        <td><%= report.description %></td>
+                        <td><%= new Date(report.created_at).toLocaleString() %></td>
+                      </tr>
+                    <% }) %>
+                  <% } %>
+                </tbody>
+              </table>
+            </div>
+            <!-- /.card-body -->
+          </div>
+          <!-- /.card -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+  </section>
+  
