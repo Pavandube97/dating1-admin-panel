@@ -3,7 +3,7 @@ const router = express.Router();
 const { checkAuth } = require('../middleware/auth');
 const axios = require('axios');
 
-const API_BASE = 'https://chikaodi-dating-app-s66t.onrender.com/api/v1/admin';
+const API_BASE = 'http://3.148.215.190/api/v1/admin';
 
 
 router.get('/', (req, res) => {
@@ -146,7 +146,7 @@ router.post('/questions/add', async (req, res) => {
 
     const optionsArray = options.split(',').map(opt => opt.trim());
 
-    await axios.post('https://chikaodi-dating-app-s66t.onrender.com/api/v1/admin/questions', {
+    await axios.post('http://3.148.215.190/api/v1/admin/questions', {
       question_text,
       alternate_question_text,
       options: optionsArray,
