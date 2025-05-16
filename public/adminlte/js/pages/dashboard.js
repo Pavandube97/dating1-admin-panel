@@ -29,8 +29,7 @@ $(function () {
   })
 
   // bootstrap WYSIHTML5 - text editor
-  $('.textarea').summernote()
-
+ 
   $('.daterange').daterangepicker({
     ranges: {
       Today: [moment(), moment()],
@@ -264,4 +263,5 @@ $(function () {
     data: salesGraphChartData,
     options: salesGraphChartOptions
   })
+
 })

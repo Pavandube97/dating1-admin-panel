@@ -3,7 +3,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title><%= title || 'AdminLTE 3 | Log in' %></title>
+    <title>Typical | <%= title || 'Log in' %></title>
+
     
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -13,11 +14,123 @@
     <link rel="stylesheet" href="/adminlte/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="/adminlte/css/adminlte.min.css">
+    <style>
+      body {
+        background-color: #131824;
+        font-family: 'Source Sans Pro', sans-serif;
+        color: #FFFFFF;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    
+      .login-box {
+        width: 100%;
+        max-width: 420px;
+      }
+    
+      .login-logo {
+        text-align: center;
+        margin-bottom: 10px;
+      }
+    
+      .login-logo img {
+        max-width: 150px;
+        margin-bottom: 10px;
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+      }
+    
+      .card {
+        background: #FFFFFF;
+        border-radius: 18px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        color: #131824;
+        border: none;
+      }
+    
+      .login-card-body {
+        padding: 2rem;
+      }
+    
+      .login-box-msg {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #131824 !important;
+        text-align: center;
+        margin-bottom: 25px;
+      }
+    
+      .form-control {
+        border-radius: 12px;
+        padding: 12px 15px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        background: #FFFFFF;
+        color: #131824;
+        transition: 0.3s;
+      }
+    
+      .form-control:focus {
+        border-color: #5917CB;
+        box-shadow: 0 0 0 0.2rem rgba(89, 23, 203, 0.25);
+      }
+    
+      .input-group-text {
+        border-radius: 0 12px 12px 0;
+        background: #f4f6f9;
+        border: 1px solid #ccc;
+        color: #131824;
+      }
+    
+      .btn-primary {
+        background-color: #5917CB !important;
+        border: none;
+        padding: 10px;
+        font-weight: 600;
+        font-size: 16px;
+        border-radius: 12px;
+        transition: 0.3s;
+        color: #FFFFFF !important;
+      }
+    
+      .btn-primary:hover {
+        background-color: #4e15b7 !important;
+        box-shadow: 0 6px 12px rgba(89, 23, 203, 0.4);
+      }
+    
+      .alert-danger {
+        border-radius: 12px;
+        font-size: 0.95rem;
+        color: #FFFFFF;
+        background-color: #5917CB;
+        border: none;
+      }
+    
+      .fas.fa-eye,
+      .fas.fa-eye-slash {
+        color: #888;
+        font-size: 1rem;
+      }
+    
+      @media (max-width: 480px) {
+        .login-box {
+          padding: 10px;
+        }
+    
+        .login-card-body {
+          padding: 1.5rem;
+        }
+      }
+    </style>
+    
+    
 </head>
 <body class="hold-transition login-page">
 <div class="login-box">
   <div class="login-logo">
-    <a href="/"><b>Admin</b>LTE</a>
+    <img src="/adminlte/img/logo.png" class="" alt="User Image">
+    <!-- <a href="/"><b>Admin</b>LTE</a> -->
   </div>
   <!-- /.login-logo -->
   <div class="card">
@@ -33,7 +146,7 @@
       <% } %>
       <form action="/login" method="POST">
         <div class="input-group mb-3">
-          <input type="email" class="form-control" placeholder="Email" name="email" required>
+          <input type="email" class="form-control" placeholder="Email" name="email" value="<%= email %>" required>
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-envelope"></span>
@@ -41,10 +154,10 @@
           </div>
         </div>
         <div class="input-group mb-3">
-          <input type="password" class="form-control" placeholder="Password" name="password" required>
+          <input type="password" class="form-control" placeholder="Password" name="password" id="password" required>
           <div class="input-group-append">
             <div class="input-group-text">
-              <span class="fas fa-lock"></span>
+              <span class="fas fa-eye-slash" id="togglePassword" style="cursor: pointer;"></span>
             </div>
           </div>
         </div>
@@ -73,6 +186,23 @@
 <script src="/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
 <script src="/adminlte/js/adminlte.min.js"></script>
+
+<script>
+  document.getElementById("togglePassword").addEventListener("click", function () {
+    const passwordInput = document.getElementById("password");
+    const icon = this;
+
+    if (passwordInput.type === "password") {
+      passwordInput.type = "text";
+      icon.classList.remove("fa-eye-slash");
+      icon.classList.add("fa-eye");
+    } else {
+      passwordInput.type = "password";
+      icon.classList.remove("fa-eye");
+      icon.classList.add("fa-eye-slash");
+    }
+  });
+</script>
 
 </body>
 </html>

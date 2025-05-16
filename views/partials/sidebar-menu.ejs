@@ -28,6 +28,24 @@
         </a>
       </li>
       <li class="nav-item">
+        <a href="/blocked-users" class="nav-link <%= currentUrl.startsWith('/blocked-users') ? 'active' : '' %>">
+          <i class="nav-icon fas fa-ban"></i>
+          <p>Blocked Users</p>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="/content-moderation" class="nav-link <%= currentUrl.startsWith('/content-moderation') ? 'active' : '' %>">
+          <i class="nav-icon fas fa-shield-alt"></i>
+          <p>Content Moderation</p>
+        </a>
+      </li>
+      <!-- <li class="nav-item">
+        <a href="/question-answers" class="nav-link <%= currentUrl.startsWith('/question-answers') ? 'active' : '' %>">
+          <i class="nav-icon fas fa-question-circle"></i>
+          <p>Question Answers</p>
+        </a>
+      </li> -->
+      <li class="nav-item">
         <a href="/logout" class="nav-link" onclick="return confirm('Are you sure you want to logout?');">
           <i class="nav-icon fas fa-sign-out-alt"></i>
           <p>Logout</p>

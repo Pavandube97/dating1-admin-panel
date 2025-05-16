@@ -1,0 +1,70 @@
+<!-- Main content -->
+<section class="content py-4">
+  <div class="container-fluid">
+    <h3 class="mb-4 font-weight-bold"><%= title %></h3>
+
+    <% if (typeof error !== 'undefined' && error) { %>
+      <div class="alert alert-danger"><%= error %></div>
+    <% } %>
+
+    <% if (questionAnswers.length === 0) { %>
+      <div class="alert alert-info">No question answers found.</div>
+    <% } else { %>
+      <% 
+        const groupedByUser = {};
+        questionAnswers.forEach(item => {
+          const userId = item.user.user_id;
+          if (!groupedByUser[userId]) {
+            groupedByUser[userId] = {
+              user: item.user,
+              answers: []
+            };
+          }
+          groupedByUser[userId].answers.push(item);
+        });
+      %>
+
+      <% Object.values(groupedByUser).forEach(userGroup => { %>
+        <div class="card shadow-sm mb-4 border-0">
+          <div class="card-header bg-primary text-white d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center">
+              <% if (userGroup.user.profile_image && userGroup.user.profile_image.length > 0) { %>
+                <img src="<%= userGroup.user.profile_image[0].url %>" alt="Profile Image"
+                  class="rounded-circle mr-3" style="width: 50px; height: 50px; object-fit: cover;">
+              <% } else { %>
+                <div class="rounded-circle bg-light text-dark d-flex align-items-center justify-content-center mr-3" 
+                  style="width: 50px; height: 50px; font-size: 20px;">
+                  <%= userGroup.user.name.charAt(0).toUpperCase() %>
+                </div>
+              <% } %>
+              <h5 class="mb-0"><%= userGroup.user.name %></h5>
+            </div>
+          </div>
+
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table table-striped table-bordered mb-0">
+                <thead class="thead-light">
+                  <tr>
+                    <th>Question</th>
+                    <th>User's Answer</th>
+                    <th>Correct Answer</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% userGroup.answers.forEach(answer => { %>
+                    <tr>
+                      <td><%= answer.question.question_text %></td>
+                      <td><%= answer.user_selected_answer || answer.user_selected_custom_answer || 'N/A' %></td>
+                      <td><%= answer.question.correct_answer %></td>
+                    </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    <% } %>
+  </div>
+</section>

@@ -1,0 +1,67 @@
+<!-- Main content -->
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Blocked User List</h3>
+            <div class="card-tools">
+              <!-- Add any tools or buttons if needed -->
+            </div>
+          </div>
+          <!-- /.card-header -->
+          <div class="card-body">
+            <table id="usersTable" class="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Profile</th>
+                  <th>Name</th>
+                  <th>Gender</th>
+                  <th>Description</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% blockedUsers.forEach((block, index)=> { %>
+                  <tr>
+                    <td>
+                      <%= index + 1 %>
+                    </td>
+                    <td>
+                      <% if (block.blocked.profile_image && block.blocked.profile_image.length> 0) { %>
+                        <img src="<%= block.blocked.profile_image[0].url %>" alt="Profile Image"
+                          style="width: 50px; height: 50px; border-radius: 50%;">
+                        <% } else { %>
+                          <img src="/public/adminlte/img/default-150x150.png" alt="Default Image"
+                            style="width: 50px; height: 50px; border-radius: 50%;">
+                          <% } %>
+                    </td>
+                    <td>
+                      <%= block.blocked.name %>
+                    </td>
+                    <td>
+                      <%= block.blocked.gender %>
+                    </td>
+                    <td>
+                      <%= block.description %>
+                    </td>
+                    <td>
+                      <%= new Date(block.created_at).toLocaleString() %>
+                    </td>
+                  </tr>
+                  <% }) %>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>

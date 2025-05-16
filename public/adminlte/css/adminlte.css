@@ -6850,9 +6850,9 @@ button.bg-success:focus {
   background-color: #1e7e34 !important;
 }
 
-.bg-info {
-  background-color: #17a2b8 !important;
-}
+/* .bg-info {
+  background-color: #5917CB !important;
+} */
 
 a.bg-info:hover, a.bg-info:focus,
 button.bg-info:hover,

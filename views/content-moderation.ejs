@@ -1,0 +1,89 @@
+<!-- Main content -->
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Content Moderation List</h3>
+            <div class="card-tools">
+              <!-- Add any tools or buttons if needed -->
+            </div>
+          </div>
+          <!-- /.card-header -->
+          <div class="card-body">
+            <table id="usersTable" class="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Old Image</th>
+                  <th>New Image</th>
+                  <th>Status</th>
+                  <th>Created At</th>
+                  <th>Reviewed At</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% contentModeration.forEach((item, index)=> { %>
+                  <tr>
+                    <td>
+                      <%= index + 1 %>
+                    </td>
+                    <td>
+                      <%= item.name %>
+                    </td>
+
+                    <!-- Old Image -->
+                    <td>
+                      <% if (item.profile_image && item.profile_image.length> 0) { %>
+                        <img src="<%= item.profile_image[0].url %>" alt="Old Image"
+                          style="width:50px; height:50px; object-fit:cover; border-radius:50%;" />
+                        <% } else { %>
+                          No Image
+                          <% } %>
+                    </td>
+
+                    <!-- New Image -->
+                    <td>
+                      <% if (item.last_pending.profile_image && item.last_pending.profile_image.length> 0) { %>
+                        <img src="<%= item.last_pending.profile_image[0].url %>" alt="New Image"
+                          style="width:50px; height:50px; object-fit:cover; border-radius:50%;" />
+                        <% } else { %>
+                          No Image
+                          <% } %>
+                    </td>
+
+                    <!-- Status -->
+                  
+                      <td>
+                        <span class="badge 
+                          <%= item.last_pending.status === 'Approved' ? 'badge-success' : 
+                              item.last_pending.status === 'Pending' ? 'badge-warning' : 
+                              item.last_pending.status === 'Rejected' ? 'badge-danger' : 
+                              'badge-secondary' %>">
+                          <%= item.last_pending.status %>
+                        </span> 
+                    </td>
+
+                    <!-- Created At -->
+                    <td>
+                      <%= item.last_pending.created_at ? new Date(item.last_pending.created_at).toLocaleString() : 'N/A'
+                        %>
+                    </td>
+
+                    <!-- Reviewed At -->
+                    <td>
+                      <%= item.last_pending.reviewed_at ? new Date(item.last_pending.reviewed_at).toLocaleString()
+                        : 'N/A' %>
+                    </td>
+                  </tr>
+                  <% }) %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
