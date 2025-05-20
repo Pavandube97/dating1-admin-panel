@@ -30,10 +30,10 @@
                 </tr>
               </thead>
               <tbody>
-                <% users.forEach(user=> { %>
+                <% users.forEach((user,index)=> { %>
                   <tr>
                     <td>
-                      <%= user.id %>
+                      <%= index + 1 %>
                     </td>
                     <td>
                       <% if (user.profile_image && user.profile_image.length> 0) { %>

@@ -64,12 +64,6 @@ router.get('/dashboard', checkAuth, async (req, res) => {
     const questions = questionsRes.data.data || [];
     const totalQuestions = questions.length;
 
-    console.log("Dashboard data:", {
-      totalUsers,
-      totalBlocked,
-      totalReported,
-      totalQuestions
-    });
     res.render('dashboard', {
       title: 'Dashboard',
       totalUsers,
@@ -124,6 +118,8 @@ router.get('/users', checkAuth, async (req, res) => {
 
     // Ensure the response has the 'users' data
     const users = response.data.data.users;
+
+    console.log("Users data:", users);
     // Render the users page
     res.render('users', {
       users: users,  // Ensure 'users' is passed as an array
@@ -350,6 +346,14 @@ router.post('/users/block-toggle', checkAuth, async (req, res) => {
     console.error('Error toggling block status:', err.message);
     res.status(500).json({ status: 0, message: 'Failed to toggle block status' });
   }
+});
+
+router.get('/revenue', checkAuth, (req, res) => {
+  res.render('revenue', { title: 'Revenue' });
+});
+
+router.get('/notifications', checkAuth, (req, res) => {
+  res.render('notifications', { title: 'Notifications' });
 });
 
 module.exports = router;
