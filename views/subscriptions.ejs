@@ -1,0 +1,54 @@
+<!-- Subscription List -->
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Subscription List</h3>
+          </div>
+          <div class="card-body">
+            <% if (subscriptions && subscriptions.length > 0) { %>
+            <table id="usersTable" class="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Product ID</th>
+                  <th>Coins Given</th>
+                  <th>Purchased At</th>
+                  <th>Expired At</th>
+                  <th>User Name</th>
+                  <th>Coin Balance</th>
+                  <th>Active</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% subscriptions.forEach((sub, index) => { %>
+                  <tr>
+                    <td><%= index + 1 %></td>
+                    <td><%= sub.product_id %></td>
+                    <td><%= sub.coinsGiven %></td>
+                    <td><%= new Date(sub.purchased_at).toLocaleString() %></td>
+                    <td><%= new Date(sub.expired_at).toLocaleString() %></td>
+                    <td><%= sub.user ? sub.user.name : 'N/A' %></td>
+                    <td><%= sub.user ? sub.user.coin_balance : 'N/A' %></td>
+                    <td>
+                      <% if (sub.isActive) { %>
+                        <span class="badge badge-success">Yes</span>
+                      <% } else { %>
+                        <span class="badge badge-danger">No</span>
+                      <% } %>
+                    </td>
+                  </tr>
+                <% }); %>
+              </tbody>
+            </table>
+            <% } else { %>
+              <p>No subscriptions found.</p>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

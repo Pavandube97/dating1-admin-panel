@@ -40,6 +40,12 @@
         </a>
       </li>
       <li class="nav-item">
+        <a href="/subscriptions" class="nav-link <%= currentUrl.startsWith('/subscriptions') ? 'active' : '' %>">
+          <i class="nav-icon fas fa-list"></i>
+          <p>Subscriptions</p>
+        </a>
+      </li>  
+      <li class="nav-item">
         <a href="/revenue" class="nav-link <%= currentUrl.startsWith('/revenue') ? 'active' : '' %>">
           <i class="nav-icon fas fa-dollar-sign"></i>
           <p>Revenue</p>
@@ -56,6 +62,6 @@
           <i class="nav-icon fas fa-sign-out-alt"></i>
           <p>Logout</p>
         </a>
-      </li>      
+      </li>    
     </ul>
   </nav>

@@ -39,37 +39,22 @@ router.get('/dashboard', checkAuth, async (req, res) => {
       Authorization: `Bearer ${req.session.token}`
     };
 
-    // Fetch all data in parallel
-    const [
-      usersRes,
-      blockedRes,
-      reportedRes,
-      questionsRes
-    ] = await Promise.all([
-      axios.get(`${API_BASE}/users`, { headers, params: { page: 1, limit: 50 } }),
-      axios.get(`${API_BASE}/block/users`, { headers }),
-      axios.get(`${API_BASE}/report/reported-users`, { headers }),
-      axios.get(`${API_BASE}/questions`, { headers })
-    ]);
+    // Fetch dashboard data from single API endpoint
+    const response = await axios.get(`${API_BASE}/dashboard`, { headers });
 
-    // Extract total counts
-    const totalUsers = usersRes.data.data.pagination.totalUsers || 0;
+    const data = response.data.data || {};
 
-    const blockedUsers = blockedRes.data.data || [];
-    const totalBlocked = blockedUsers.length;
-
-    const reportedUsers = reportedRes.data.message || [];
-    const totalReported = reportedUsers.length;
-
-    const questions = questionsRes.data.data || [];
-    const totalQuestions = questions.length;
+    const totalUsers = data.all_users || 0;
+    const totalBlocked = data.blocked_users || 0;
+    const totalReported = data.resported_users || 0; // Assuming typo in API response key
+    const onlineUsers = data.online_users || 0;
 
     res.render('dashboard', {
       title: 'Dashboard',
       totalUsers,
       totalBlocked,
       totalReported,
-      totalQuestions
+      onlineUsers
     });
 
   } catch (err) {
@@ -354,6 +339,77 @@ router.get('/revenue', checkAuth, (req, res) => {
 
 router.get('/notifications', checkAuth, (req, res) => {
   res.render('notifications', { title: 'Notifications' });
+});
+
+// Route to render edit user form
+router.get('/users/edit/:id', checkAuth, async (req, res) => {
+  const userId = req.params.id;
+  try {
+    const response = await axios.get(`${API_BASE}/users/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${req.session.token}`
+      }
+    });
+    const user = response.data.data;
+    res.render('users-edit', { user, title: 'Edit User' });
+  } catch (err) {
+    console.error('Error fetching user for edit:', err.message);
+    res.redirect('/users');
+  }
+});
+
+router.post('/users/edit/:id', checkAuth, async (req, res) => {
+  const userId = req.params.id;
+  const { name, email, gender, age, orientation, is_profile_completed, is_blocked } = req.body;
+  try {
+    await axios.post(`${API_BASE}/update-user`, {
+      name,
+      email,
+      gender,
+      age: age ? parseInt(age) : null,
+      orientation,
+      is_profile_completed: is_profile_completed === 'true',
+      is_blocked: is_blocked === 'true'
+    }, {
+      headers: {
+        Authorization: `Bearer ${req.session.token}`
+      },
+      params: {
+        userId: userId
+      }
+    });
+    res.redirect('/users');
+  } catch (err) {
+    console.error('Error updating user:', err.message);
+    res.redirect(`/users/edit/${userId}`);
+  }
+});
+
+// Subscription List Route
+router.get('/subscriptions', checkAuth, async (req, res) => {
+  try {
+    const response = await axios.get(`${API_BASE}/subscription`, {
+      headers: {
+        Authorization: `Bearer ${req.session.token}`
+      }
+    });
+
+    const subscriptions = response.data.data || [];
+
+    res.render('subscriptions', {
+      subscriptions,
+      title: 'Subscription List',
+      currentUrl: req.originalUrl
+    });
+  } catch (err) {
+    console.error("Error fetching subscriptions:", err.message);
+    res.render('subscriptions', {
+      subscriptions: [],
+      error: 'Failed to load subscriptions',
+      title: 'Subscription List',
+      currentUrl: req.originalUrl
+    });
+  }
 });
 
 module.exports = router;
