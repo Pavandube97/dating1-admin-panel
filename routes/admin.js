@@ -104,7 +104,6 @@ router.get('/users', checkAuth, async (req, res) => {
     // Ensure the response has the 'users' data
     const users = response.data.data.users;
 
-    console.log("Users data:", users);
     // Render the users page
     res.render('users', {
       users: users,  // Ensure 'users' is passed as an array
@@ -196,7 +195,7 @@ router.get('/blocked-users', checkAuth, async (req, res) => {
         user: block.blocked
       };
     });
-    
+
     res.render('blocked-users', {
       blockedUsers,
       title: 'Blocked Users'
@@ -224,27 +223,42 @@ router.get('/content-moderation', checkAuth, async (req, res) => {
     });
 
     const rawData = response.data.data || [];
-    // const contentModeration = response.data.data;
+    console.log("Raw Content Moderation data:", rawData);
+   
     // Filter out users with empty or null pending_updated
     const contentModeration = rawData
       .filter(user =>
         Array.isArray(user.pending_updated) && user.pending_updated.length > 0
       )
       .map(user => {
-        const lastPending = user.pending_updated[user.pending_updated.length - 1];
+        const pendings = user.pending_updated;
+
+        const lastPending = pendings[pendings.length - 1];
+
+        // Sort pendings oldest first (for accuracy)
+        const sortedPendings = [...pendings].sort(
+          (a, b) => new Date(a.created_at) - new Date(b.created_at)
+        );
+
+        const firstApproved = sortedPendings.find(p => p.status.toLowerCase() === 'approved');
+
+        const oldImage = firstApproved?.profile_image?.length
+          ? firstApproved.profile_image
+          : (user.profile_image?.length ? user.profile_image : []);
+
 
         return {
           ...user,
           last_pending: {
-            profile_image: lastPending.profile_image || [],
-            status: lastPending.status || 'N/A',
-            created_at: lastPending.created_at || null,
-            reviewed_at: lastPending.reviewed_at || null
-          }
+            profile_image: lastPending?.profile_image || [],
+            status: lastPending?.status || 'N/A',
+            created_at: lastPending?.created_at || null,
+            reviewed_at: lastPending?.reviewed_at || null
+          },
+          old_image: oldImage
         };
       });
 
-    // console.log("Content Moderation data:", contentModeration);
     res.render('content-moderation', {
       contentModeration,
       title: 'Content Moderation'

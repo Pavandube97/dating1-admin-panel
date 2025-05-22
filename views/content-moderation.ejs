@@ -33,11 +33,10 @@
                     <td>
                       <%= item.name %>
                     </td>
-
                     <!-- Old Image -->
                     <td>
-                      <% if (item.profile_image && item.profile_image.length> 0) { %>
-                        <img src="<%= item.profile_image[0].url %>" alt="Old Image"
+                      <% if (item.old_image && item.old_image.length> 0 && item.old_image[0].url) { %>
+                        <img src="<%= item.old_image[0].url %>" alt="Old Image"
                           style="width:50px; height:50px; object-fit:cover; border-radius:50%;" />
                         <% } else { %>
                           No Image
@@ -55,15 +54,15 @@
                     </td>
 
                     <!-- Status -->
-                  
-                      <td>
-                        <span class="badge 
+
+                    <td>
+                      <span class="badge 
                           <%= item.last_pending.status === 'Approved' ? 'badge-success' : 
                               item.last_pending.status === 'Pending' ? 'badge-warning' : 
                               item.last_pending.status === 'Rejected' ? 'badge-danger' : 
                               'badge-secondary' %>">
-                          <%= item.last_pending.status %>
-                        </span> 
+                        <%= item.last_pending.status %>
+                      </span>
                     </td>
 
                     <!-- Created At -->
