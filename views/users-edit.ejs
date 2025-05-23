@@ -2,51 +2,58 @@
 <section class="content">
   <div class="container-fluid">
     <div class="row">
-      <div class="col-12">
+      <div class="col-md-12">
         <div class="card">
           <div class="card-header">
             <h3 class="card-title">Edit User</h3>
           </div>
           <div class="card-body">
             <form id="editUserForm" method="POST" action="/users/edit/<%= user.id %>">
-              <div class="form-group">
-                <label for="name">Name</label>
-                <input type="text" class="form-control" id="name" name="name" value="<%= user.name %>" required>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="name">Name</label>
+                  <input type="text" class="form-control" id="name" name="name" value="<%= user.name %>" required>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="email">Email</label>
+                  <input type="email" class="form-control" id="email" name="email" value="<%= user.email %>" required>
+                </div>
               </div>
-              <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" class="form-control" id="email" name="email" value="<%= user.email %>" required>
+
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="gender">Gender</label>
+                  <select class="form-control" id="gender" name="gender">
+                    <option value="male" <%= user.gender === 'male' ? 'selected' : '' %>>Male</option>
+                    <option value="female" <%= user.gender === 'female' ? 'selected' : '' %>>Female</option>
+                    <option value="other" <%= user.gender === 'other' ? 'selected' : '' %>>Other</option>
+                  </select>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="age">Age</label>
+                  <input type="number" class="form-control" id="age" name="age" value="<%= user.age %>">
+                </div>
               </div>
-              <div class="form-group">
-                <label for="gender">Gender</label>
-                <select class="form-control" id="gender" name="gender">
-                  <option value="male" <%= user.gender === 'male' ? 'selected' : '' %>>Male</option>
-                  <option value="female" <%= user.gender === 'female' ? 'selected' : '' %>>Female</option>
-                  <option value="other" <%= user.gender === 'other' ? 'selected' : '' %>>Other</option>
-                </select>
+
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="orientation">mobile</label>
+                  <input type="text" class="form-control" id="mobile" name="mobile" value="<%= user.mobile %>">
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="is_profile_completed">Profile Completed</label>
+                  <select class="form-control" id="is_profile_completed" name="is_profile_completed">
+                    <option value="true" <%= user.is_profile_completed ? 'selected' : '' %>>Yes</option>
+                    <option value="false" <%= !user.is_profile_completed ? 'selected' : '' %>>No</option>
+                  </select>
+                </div>
               </div>
+
               <div class="form-group">
-                <label for="age">Age</label>
-                <input type="number" class="form-control" id="age" name="age" value="<%= user.age %>">
+                <label for="address">Address</label>
+                <input type="text" class="form-control" id="address" name="address" value="<%= user.address %>">
               </div>
-              <div class="form-group">
-                <label for="orientation">Orientation</label>
-                <input type="text" class="form-control" id="orientation" name="orientation" value="<%= user.orientation %>">
-              </div>
-              <div class="form-group">
-                <label for="is_profile_completed">Profile Completed</label>
-                <select class="form-control" id="is_profile_completed" name="is_profile_completed">
-                  <option value="true" <%= user.is_profile_completed ? 'selected' : '' %>>Yes</option>
-                  <option value="false" <%= !user.is_profile_completed ? 'selected' : '' %>>No</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="is_blocked">Is Blocked</label>
-                <select class="form-control" id="is_blocked" name="is_blocked">
-                  <option value="true" <%= user.is_blocked ? 'selected' : '' %>>Yes</option>
-                  <option value="false" <%= !user.is_blocked ? 'selected' : '' %>>No</option>
-                </select>
-              </div>
+
               <button type="submit" class="btn btn-primary">Save Changes</button>
               <a href="/users" class="btn btn-secondary">Cancel</a>
             </form>

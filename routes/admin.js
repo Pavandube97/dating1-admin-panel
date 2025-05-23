@@ -224,7 +224,7 @@ router.get('/content-moderation', checkAuth, async (req, res) => {
 
     const rawData = response.data.data || [];
     console.log("Raw Content Moderation data:", rawData);
-   
+
     // Filter out users with empty or null pending_updated
     const contentModeration = rawData
       .filter(user =>
@@ -359,31 +359,42 @@ router.get('/notifications', checkAuth, (req, res) => {
 router.get('/users/edit/:id', checkAuth, async (req, res) => {
   const userId = req.params.id;
   try {
-    const response = await axios.get(`${API_BASE}/users/${userId}`, {
+    const response = await axios.get(`${API_BASE}/get-user`, {
       headers: {
         Authorization: `Bearer ${req.session.token}`
+      },
+      params: {
+        userId: userId  // API expects userId as query param
       }
     });
+
     const user = response.data.data;
-    res.render('users-edit', { user, title: 'Edit User' });
+    res.render('users-edit', {
+      user: user,
+      title: 'Edit User'
+    });
   } catch (err) {
     console.error('Error fetching user for edit:', err.message);
+    req.session.error = 'User details load nahi ho paye';
     res.redirect('/users');
   }
 });
 
 router.post('/users/edit/:id', checkAuth, async (req, res) => {
   const userId = req.params.id;
-  const { name, email, gender, age, orientation, is_profile_completed, is_blocked } = req.body;
+  const { name, email, gender, age, orientation, is_profile_completed,address,mobile } = req.body;
+
+  console.log('Edit user request body:', req.body);
   try {
-    await axios.post(`${API_BASE}/update-user`, {
+    await axios.put(`${API_BASE}/update-user`, {
       name,
       email,
       gender,
       age: age ? parseInt(age) : null,
       orientation,
       is_profile_completed: is_profile_completed === 'true',
-      is_blocked: is_blocked === 'true'
+      address,
+      mobile
     }, {
       headers: {
         Authorization: `Bearer ${req.session.token}`
@@ -392,9 +403,10 @@ router.post('/users/edit/:id', checkAuth, async (req, res) => {
         userId: userId
       }
     });
+    req.session.success = 'User successfully updated';
     res.redirect('/users');
   } catch (err) {
-    console.error('Error updating user:', err.message);
+    req.session.formData = req.body; // Save form data to repopulate
     res.redirect(`/users/edit/${userId}`);
   }
 });
@@ -422,6 +434,33 @@ router.get('/subscriptions', checkAuth, async (req, res) => {
       error: 'Failed to load subscriptions',
       title: 'Subscription List',
       currentUrl: req.originalUrl
+    });
+  }
+});
+
+// Block/Unblock user route
+router.put('/users/block-toggle/:userId', checkAuth, async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const { block } = req.body;
+
+    const response = await axios.put(
+      `${API_BASE}/users/block/${userId}`, 
+      { block },
+      {
+        headers: {
+          Authorization: `Bearer ${req.session.token}`,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+
+    res.json(response.data);
+  } catch (err) {
+    console.error('Block toggle error:', err.response?.data || err.message);
+    res.status(500).json({ 
+      status: 0, 
+      message: err.response?.data?.message || 'Failed to toggle block status' 
     });
   }
 });

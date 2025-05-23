@@ -210,5 +210,52 @@
       });
     });
   });
+
+
+  // Block toggle functionality
+  document.addEventListener('DOMContentLoaded', function() {
+  // Block/Unblock toggle functionality
+  document.querySelectorAll('.block-toggle').forEach(toggle => {
+    toggle.addEventListener('change', function() {
+      const userId = this.dataset.userId;
+      const isBlocked = this.checked;
+      
+      if (confirm(`Kya aap sure hain ki aap is user ko ${isBlocked ? 'block' : 'unblock'} karna chahte hain?`)) {
+        // API call to block/unblock user
+        fetch(`/users/block-toggle/${userId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer <%= token %>'
+          },
+          body: JSON.stringify({
+            block: isBlocked
+          })
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          if (data.status === 1) {
+            alert(`User successfully ${isBlocked ? 'blocked' : 'unblocked'}`);
+          } else {
+            alert('Operation failed: ' + (data.message || 'Unknown error'));
+            this.checked = !isBlocked; // Revert toggle
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          this.checked = !isBlocked; // Revert toggle
+          alert('Operation failed: ' + error.message);
+        });
+      } else {
+        this.checked = !isBlocked; // Revert toggle
+      }
+    });
+  });
+});
 </script>
 
