@@ -252,6 +252,8 @@ router.get('/content-moderation', checkAuth, async (req, res) => {
           last_pending: {
             profile_image: lastPending?.profile_image || [],
             status: lastPending?.status || 'N/A',
+            id: lastPending?.id || null,
+            user_id: lastPending?.user_id || null,
             created_at: lastPending?.created_at || null,
             reviewed_at: lastPending?.reviewed_at || null
           },
@@ -261,7 +263,8 @@ router.get('/content-moderation', checkAuth, async (req, res) => {
 
     res.render('content-moderation', {
       contentModeration,
-      title: 'Content Moderation'
+      title: 'Content Moderation',
+      token: req.session.token 
     });
 
   } catch (err) {
@@ -301,31 +304,6 @@ router.post('/questions/add', async (req, res) => {
   }
 });
 
-// router.get('/question-answers', checkAuth, async (req, res) => {
-//   try {
-//     const response = await axios.get(`${API_BASE}/monitor/question_answer`, {
-//       headers: {
-//         Authorization: `Bearer ${req.session.token}`
-//       }
-//     });
-
-//     const questionAnswers = response.data.data;
-//     console.log("Question Answers data:", questionAnswers);
-//     res.render('question-answers', {
-//       questionAnswers,
-//       title: 'Question Answers'
-//     });
-
-//   } catch (err) {
-//     console.error("Error fetching question answers:", err.message);
-
-//     res.render('question-answers', {
-//       questionAnswers: [],
-//       error: 'Failed to load question answers',
-//       title: 'Question Answers'
-//     });
-//   }
-// });
 
 router.post('/users/block-toggle', checkAuth, async (req, res) => {
   try {
@@ -465,4 +443,33 @@ router.put('/users/block-toggle/:userId', checkAuth, async (req, res) => {
   }
 });
 
+
+// Content Moderation Update Route (Approve/Reject)
+router.put('/content-moderation/update', checkAuth, async (req, res) => {
+  try {
+    const { id, user_id, action } = req.body;
+    
+    const response = await axios.put(
+      `${API_BASE}/approve_reject_update`,
+      {
+        id: id,
+        user_id: user_id
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${req.session.token}`,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+
+    res.json(response.data);
+  } catch (err) {
+    console.error('Error updating moderation status:', err.message);
+    res.status(500).json({
+      status: 0,
+      message: err.response?.data?.message || 'Failed to update moderation status'
+    });
+  }
+});
 module.exports = router;

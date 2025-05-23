@@ -54,15 +54,29 @@
                     </td>
 
                     <!-- Status -->
-
+                    
                     <td>
-                      <span class="badge 
-                          <%= item.last_pending.status === 'Approved' ? 'badge-success' : 
-                              item.last_pending.status === 'Pending' ? 'badge-warning' : 
-                              item.last_pending.status === 'Rejected' ? 'badge-danger' : 
-                              'badge-secondary' %>">
-                        <%= item.last_pending.status %>
-                      </span>
+                      <% if (item.last_pending.status === 'pending') { %>
+                        <div style="display: flex; align-items: center; gap: 5px;">
+                          <button class="btn btn-xs btn-success approve-btn" 
+                                  data-id="<%= item.last_pending.id %>" 
+                                  data-user-id="<%= item.last_pending.user_id %>">
+                            Approved
+                          </button>
+                          <button class="btn btn-xs btn-danger reject-btn" 
+                                  data-id="<%= item.last_pending.id %>" 
+                                  data-user-id="<%= item.last_pending.user_id %>">
+                           Rejected
+                          </button>
+                        </div>
+                      <% } else if (item.last_pending.status === 'approved') { %>
+                        <span class="badge badge-success">Approved</span>
+                      <% } else if (item.last_pending.status === 'rejected') { %>
+                        <span class="badge badge-danger">Rejected</span>
+                      <% } else { %>
+                        <span class="badge badge-secondary"><%= item.last_pending.status %></span>
+                      <% } %>
+                      
                     </td>
 
                     <!-- Created At -->
@@ -86,3 +100,58 @@
     </div>
   </div>
 </section>
+<!-- Add this at the bottom of your content-moderation.ejs file, before closing body tag -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Function to handle API call
+    async function updateModerationStatus(id, userId, action) {
+      try {
+        const response = await fetch('/content-moderation/update', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer <%= token %>' // Use the token from EJS
+          },
+          body: JSON.stringify({
+            id: id,
+            user_id: userId,
+            action: action
+          })
+        });
+  
+        const data = await response.json();
+        
+        if(data.status === 1) {
+          alert(`Content ${action} successfully`);
+          location.reload(); // Reload the page to see updated status
+        } else {
+          alert('Error: ' + (data.message || 'Failed to update status'));
+        }
+      } catch (error) {
+        alert('Error: ' + error.message);
+      }
+    }
+  
+    // Attach event listeners to all approve buttons
+    document.querySelectorAll('.approve-btn').forEach(button => {
+      button.addEventListener('click', function() {
+        const id = this.dataset.id;
+        const userId = this.dataset.userId;
+        if(confirm('Are you sure you want to approve this content?')) {
+          updateModerationStatus(id, userId, 'approved');
+        }
+      });
+    });
+  
+    // Attach event listeners to all reject buttons
+    document.querySelectorAll('.reject-btn').forEach(button => {
+      button.addEventListener('click', function() {
+        const id = this.dataset.id;
+        const userId = this.dataset.userId;
+        if(confirm('Are you sure you want to reject this content?')) {
+          updateModerationStatus(id, userId, 'rejected');
+        }
+      });
+    });
+  });
+  </script>
